@@ -1,0 +1,21 @@
+CHIAVI
+
+Comune
+public key:
+tbu0q8T8Q2idNntI+cZfs+nWrzzrTKlgWzQL0mR3BGg=
+secret key:
+b46FCxJ9xhlFKOTwsgLg52L8GdabXuNCZY2H2Tx/RvA=
+
+
+Soggetto accreditato 1 (Ditta Puddu)
+public key:
+IJOYvwRLjEHB7rv2ibvHgvYMXkUNauG/gMonagoKrCg=
+secret key:
+AnxImD+7jl0LKtvaYfItI4oHUE5TUneE2ooJeAl/tBw=
+
+
+Soggetto accreditato 2 (Edilizia Rossi)
+public key:
+RZG4zrSPrBwDpeCqFM8ZusKw1ebImvSH+KbkqRxBVxI=
+secret key:
+qbKARtcZe5Q6BtiSOyMzCQnpNwWpdfcQtLhL7jL7CO0=
