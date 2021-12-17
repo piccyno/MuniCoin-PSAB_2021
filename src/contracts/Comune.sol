@@ -36,6 +36,7 @@ contract Comune {
 	uint256 public idSoggettoAccreditato = 0; //contatore globale per i soggetti accreditati
 
 	MuniCoin public municoin;
+	address owner;
 
 	// indirizzo sogg. accreditato => SoggettoAccreditato
 	mapping(address => SoggettoAccreditato) public soggettiAccreditati; // elenco dei soggetti accreditati
@@ -55,7 +56,29 @@ contract Comune {
 
 	constructor(MuniCoin _municoin) public {
 		municoin = _municoin;
+		owner = msg.sender;
 	}
+	
+	
+    function checkSoggettoAccreditato(address indirizzo) public view returns(bool){
+        if(bytes(SoggettoAccreditato[indirizzo]).length>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+	  
+
+	modifier onlyOwner {
+        require(msg.sender == owner);
+        _;
+    }
+	
+	modifier onlySAorOwner {
+        require(msg.sender == owner || checkSoggettoAccreditato(msg.sender));
+        _;
+    }
 
 
 	/**
@@ -64,7 +87,7 @@ contract Comune {
 	 * _OTC: One Time Code
 	 * _cipherText: Giustificativo cifrato
 	 */
-	function addGiustificativo(uint8[] memory _OTC, uint8[] memory _cipherText) public {
+	function addGiustificativo(uint8[] memory _OTC, uint8[] memory _cipherText) public onlySAorOwner {
 	    GiustificativoCifrato memory giustificativo;
 	    uint8[] memory OTC = new uint8[](_OTC.length);
 	    uint8[] memory cipherText = new uint8[](_cipherText.length);
@@ -88,7 +111,7 @@ contract Comune {
 	 * @param:
 	 * _idGiustificativo: id del giustificativo
 	 */
-	function getGiustificativo(uint256 _idGiustificativo) public view returns (GiustificativoCifrato memory){
+	function getGiustificativo(uint256 _idGiustificativo) public view onlySAorOwner returns (GiustificativoCifrato memory){
 	    return valoriGiustificativi[_idGiustificativo];
 	}
 
@@ -140,7 +163,7 @@ contract Comune {
 	/**
 	 * restituisce la lista dei giustificativi
 	 */
-	function getValoriGiustificativi() public view returns (GiustificativoCifrato[] memory)
+	function getValoriGiustificativi() public view onlySAorOwner returns (GiustificativoCifrato[] memory)
 	{
 	    return valoriGiustificativi;
 	} 
@@ -173,8 +196,9 @@ contract Comune {
 	 * destinatario: destinatario della moneta
 	 * importo: importo da destinare
 	 */
-	function pagaSoggettoMNC(address destinatario, uint importo) public payable {
+	function pagaSoggettoMNC(address destinatario, uint importo) public onlyOwner payable {
 		require(importo > 0, "L'importo è una cifra positiva");
+		require(getBalance()-importo >= 0, "L'importo è coperto sal saldo");
 		municoin.transfer(destinatario, importo);
 	}
 
